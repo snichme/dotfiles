@@ -5,10 +5,10 @@
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 
-# Set OS X defaults
-$ZSH/osx/set-defaults.sh
-
-# Install homebrew packages
-$ZSH/homebrew/install.sh 2>&1
+brew update
+brew upgrade
+brew cleanup
 
 vim +BundleInstall +qall
+
+rm -rf ~/.Trash/*

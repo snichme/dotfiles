@@ -121,12 +121,12 @@ install_dotfiles
 if [ "$(uname -s)" == "Darwin" ]
 then
   info "installing dependencies"
-  if . bin/dot > /tmp/dotfiles-dot 2>&1
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
-  fi
+  # Set OS X defaults
+  $ZSH/osx/set-defaults.sh
+  # Install homebrew packages
+  $ZSH/homebrew/install.sh 2>&1
+
+  vim +BundleInstall +qall 2>&1
 fi
 
 echo ''
