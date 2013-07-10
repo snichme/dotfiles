@@ -3,7 +3,7 @@
 VIMIFIED_PATH=~/.vimified
 
 # Grab the project:
-git clone git://github.com/snichme/vimified.git $VIMIFIED_PATH
+git clone https://github.com/snichme/vimified.git $VIMIFIED_PATH
 ln -sfn $VIMIFIED_PATH ~/.vim
 ln -sfn $VIMIFIED_PATH/vimrc ~/.vimrc
 
