@@ -4,8 +4,8 @@
 [hub]
         protocol = https
 [user]
-        name = AUTHORNAME
-        email = AUTHOREMAIL
+        name = Magnus Andersson
+        email = mange@mange.name
 [credential]
         helper = osxkeychain
 [alias]
