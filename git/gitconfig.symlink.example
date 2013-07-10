@@ -4,16 +4,18 @@
 [hub]
         protocol = https
 [user]
-        name = Magnus Andersson
-        email = mange@mange.name
+        name = AUTHORNAME
+        email = AUTHOREMAIL
 [credential]
         helper = osxkeychain
 [alias]
         co = checkout
+        st = status
         promote = !$ZSH/bin/git-promote
         wtf     = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
+        history = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset' stash-list = stash list --pretty=format:'%Cblue%gd%Cred: %C(yellow)%s'q
 [color]
         diff = auto
         status = auto

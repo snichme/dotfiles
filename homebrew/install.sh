@@ -41,6 +41,7 @@ brew install php55
 brew install ack
 #brew install exiv2
 brew install git
+brew install hub
 #brew install imagemagick
 brew install node
 brew install tree

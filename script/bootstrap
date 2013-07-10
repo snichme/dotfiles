@@ -122,12 +122,12 @@ if [ "$(uname -s)" == "Darwin" ]
 then
   info "installing dependencies"
   # Set OS X defaults
-  $ZSH/osx/set-defaults.sh
+  $DOTFILES_ROOT/osx/set-defaults.sh
   # Install homebrew packages
-  $ZSH/homebrew/install.sh 2>&1
-
-  vim +BundleInstall +qall 2>&1
+  $DOTFILES_ROOT/homebrew/install.sh 2>&1
 fi
+
+$DOTFILES_ROOT/vim/install.sh 2>&1
 
 echo ''
 echo '  All installed!'
