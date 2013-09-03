@@ -1,6 +1,4 @@
 " Use the excellent Railscat theme by Jeff Kreeftmeijer (gVim-only)
-colorscheme railscat
-" Use 13pt Menlo
-set guifont=Menlo:h12
+set guifont="DejaVu Sans Mono":h13
 " Better line-height
 set linespace=8
