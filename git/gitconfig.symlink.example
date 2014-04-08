@@ -41,4 +41,10 @@
 [diff]
         tool = vimdiff
 [merge]
-        tool = vimdiff
+        tool = splice
+
+[mergetool "splice"]
+        cmd = "mvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+        trustExitCode = true
+
+
