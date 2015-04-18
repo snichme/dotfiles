@@ -67,4 +67,4 @@ precmd() {
   vcs_info
 }
 
-PROMPT='%F{blue}%~%F{236}`git_info` %(?.%F{magenta}.%F{red})❯%f '
+PROMPT='%F{blue}%n@%m %~%F{236}`git_info` %(?.%F{magenta}.%F{red})❯%f '
