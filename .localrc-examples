@@ -1,0 +1,17 @@
+# Copy this folder to $HOME and rename it to .localrc
+#
+# Eg: cp .localrc-example ~/.localrc
+#
+# Do this before running the bootstrap script
+
+typeset -U config_files
+
+# ZSH Glob expression for which folders to load files from.
+
+# Only read from the these given folders
+config_files=($ZSH/('system'|'osx'|'asd')/*.zsh)
+
+# Read from all folders
+config_files=($ZSH/**/*.zsh)
+
+# Example here for all except one folder...
