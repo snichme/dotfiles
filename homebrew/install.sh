@@ -36,7 +36,7 @@ brew tap homebrew/dupes
 brew install homebrew/dupes/grep
 
 # Install other useful binaries
-brew install git node tree vim emacs
+brew install git nvm tree vim emacs
 
 brew tap homebrew/versions
 
