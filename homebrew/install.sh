@@ -53,6 +53,7 @@ function installcask() {
 installcask dropbox
 installcask google-chrome
 installcask google-chrome-canary
+installcask firefox
 installcask iterm2
 installcask macvim
 installcask sublime-text3
