@@ -40,6 +40,8 @@ brew install git node tree vim emacs
 
 brew tap homebrew/versions
 
+
+
 # Install native apps
 brew tap phinze/homebrew-cask
 brew install brew-cask
@@ -53,11 +55,12 @@ installcask google-chrome
 installcask google-chrome-canary
 installcask iterm2
 installcask macvim
-installcask sublime-text
+installcask sublime-text3
 installcask the-unarchiver
 installcask transmission
 installcask virtualbox
 installcask vlc
+installcask vagrant
 
 # Remove outdated versions from the cellar
 brew cleanup
