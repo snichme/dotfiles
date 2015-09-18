@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# ~/.osx — http://mths.be/osx
+# ~/.osx — https://mths.be/osx
 
 # Ask for the administrator password upfront
 sudo -v
@@ -21,15 +21,27 @@ sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.serve
 # Set standby delay to 24 hours (default is 1 hour)
 sudo pmset -a standbydelay 86400
 
-# Menu bar: disable transparency
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
+# Disable the sound effects on boot
+sudo nvram SystemAudioVolume=" "
 
+# Disable transparency in the menu bar and elsewhere on Yosemite
+defaults write com.apple.universalaccess reduceTransparency -bool true
 # Menu bar: show remaining battery time (on pre-10.8); hide percentage
 defaults write com.apple.menuextra.battery ShowPercent -string "NO"
 defaults write com.apple.menuextra.battery ShowTime -string "YES"
 
-# Menu bar: hide the useless Time Machine and Volume icons
-defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/AirPort.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"
+# Menu bar: hide the Time Machine, Volume, and User icons
+for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
+	defaults write "${domain}" dontAutoLoad -array \
+		"/System/Library/CoreServices/Menu Extras/TimeMachine.menu" \
+		"/System/Library/CoreServices/Menu Extras/Volume.menu" \
+		"/System/Library/CoreServices/Menu Extras/User.menu"
+done
+defaults write com.apple.systemuiserver menuExtras -array \
+	"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
+	"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
+	"/System/Library/CoreServices/Menu Extras/Battery.menu" \
+	"/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 # Set highlight color to green
 defaults write NSGlobalDomain AppleHighlightColor -string '0.847059 0.847059 0.862745'
@@ -53,9 +65,11 @@ defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 
 # Expand print panel by default
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
 # Save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
@@ -71,7 +85,7 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 
 # Disable Resume system-wide
-defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
 # Disable automatic termination of inactive apps
 defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
@@ -92,16 +106,36 @@ defaults write com.apple.helpviewer DevMode -bool true
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # Restart automatically if the computer freezes
-systemsetup -setrestartfreeze on
+sudo systemsetup -setrestartfreeze on
 
 # Never go into computer sleep mode
-systemsetup -setcomputersleep Off > /dev/null
+sudo systemsetup -setcomputersleep Off > /dev/null
 
 # Check for software updates daily, not just once per week
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
 # Disable Notification Center and remove the menu bar icon
-# launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
+
+###############################################################################
+# SSD-specific tweaks                                                         #
+###############################################################################
+
+# Disable local Time Machine snapshots
+sudo tmutil disablelocal
+
+# Disable hibernation (speeds up entering sleep mode)
+sudo pmset -a hibernatemode 0
+
+# Remove the sleep image file to save disk space
+sudo rm /private/var/vm/sleepimage
+# Create a zero-byte file instead…
+sudo touch /private/var/vm/sleepimage
+# …and make sure it can’t be rewritten
+sudo chflags uchg /private/var/vm/sleepimage
+
+# Disable the sudden motion sensor as it’s not useful for SSDs
+sudo pmset -a sms 0
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
@@ -283,7 +317,7 @@ defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # Empty Trash securely by default
-defaults write com.apple.finder EmptyTrashSecurely -bool false
+defaults write com.apple.finder EmptyTrashSecurely -bool true
 
 # Enable AirDrop over Ethernet and on unsupported Macs running Lion
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
@@ -296,7 +330,7 @@ chflags nohidden ~/Library
 
 # Remove Dropbox’s green checkmark icons in Finder
 file=/Applications/Dropbox.app/Contents/Resources/emblem-dropbox-uptodate.icns
-[ -e "$file" ] && mv -f "$file" "$file.bak"
+[ -e "${file}" ] && mv -f "${file}" "${file}.bak"
 
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
@@ -307,6 +341,12 @@ defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
 # Set the icon size of Dock items to 36 pixels
 defaults write com.apple.dock tilesize -int 36
+
+# Change minimize/maximize window effect
+defaults write com.apple.dock mineffect -string "scale"
+
+# Minimize windows into their application’s icon
+defaults write com.apple.dock minimize-to-application -bool true
 
 # Enable spring loading for all Dock items
 defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
@@ -323,7 +363,7 @@ defaults write com.apple.dock show-process-indicators -bool true
 defaults write com.apple.dock launchanim -bool false
 
 # Speed up Mission Control animations
-defaults write com.apple.dock expose-animation-duration -float 0.3
+defaults write com.apple.dock expose-animation-duration -float 0.1
 
 # Don’t group windows by application in Mission Control
 # (i.e. use the old Exposé behavior instead)
@@ -352,8 +392,14 @@ defaults write com.apple.dock autohide -bool true
 # Make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool true
 
-# Reset Launchpad
-find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
+# Disable the Launchpad gesture (pinch with thumb and three fingers)
+#defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
+
+# Reset Launchpad, but keep the desktop wallpaper intact
+find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
+
+# Add iOS Simulator to Launchpad
+sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/iOS Simulator.app" "/Applications/iOS Simulator.app"
 
 # Add a spacer to the left side of the Dock (where the applications are)
 #defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
@@ -422,25 +468,6 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 ###############################################################################
-# iTunes (pre-iTunes 11 only)                                                 #
-###############################################################################
-
-# Disable the iTunes store link arrows
-defaults write com.apple.iTunes show-store-link-arrows -bool false
-
-# Disable the Genius sidebar in iTunes
-defaults write com.apple.iTunes disableGeniusSidebar -bool true
-
-# Disable radio stations in iTunes
-defaults write com.apple.iTunes disableRadio -bool true
-
-# Make ⌘ + F focus the search input in iTunes
-# To use these commands in another language, browse iTunes’s package contents,
-# open `Contents/Resources/your-language.lproj/Localizable.strings`, and look
-# for `kHiddenMenuItemTargetSearch`.
-defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
-
-###############################################################################
 # Mail                                                                        #
 ###############################################################################
 
@@ -452,7 +479,18 @@ defaults write com.apple.mail DisableSendAnimations -bool true
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 
 # Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
-defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\\U21a9"
+defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" -string "@\\U21a9"
+
+# Display emails in threaded mode, sorted by date (oldest at the top)
+defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
+defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
+defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
+
+# Disable inline attachments (just show the icons)
+defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+# Disable automatic spell checking
+defaults write com.apple.mail SpellCheckingBehavior -string "NoSpellCheckingEnabled"
 
 ###############################################################################
 # Spotlight                                                                   #
@@ -490,22 +528,69 @@ sudo mdutil -i on /
 sudo mdutil -E /
 
 ###############################################################################
-# Terminal                                                                    #
+# Terminal & iTerm 2                                                          #
 ###############################################################################
 
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
 
-# Use a modified version of the Pro theme by default in Terminal.app
-#open "$HOME/init/Mathias.terminal"
-#sleep 1 # Wait a bit to make sure the theme is loaded
-#defaults write com.apple.terminal "Default Window Settings" -string "Mathias"
-#defaults write com.apple.terminal "Startup Window Settings" -string "Mathias"
+# Use a modified version of the Solarized Dark theme by default in Terminal.app
+osascript <<EOD
+
+tell application "Terminal"
+
+	local allOpenedWindows
+	local initialOpenedWindows
+	local windowID
+	set themeName to "Solarized Dark xterm-256color"
+
+	(* Store the IDs of all the open terminal windows. *)
+	set initialOpenedWindows to id of every window
+
+	(* Open the custom theme so that it gets added to the list
+	   of available terminal themes (note: this will open two
+	   additional terminal windows). *)
+	do shell script "open '$HOME/init/" & themeName & ".terminal'"
+
+	(* Wait a little bit to ensure that the custom theme is added. *)
+	delay 1
+
+	(* Set the custom theme as the default terminal theme. *)
+	set default settings to settings set themeName
+
+	(* Get the IDs of all the currently opened terminal windows. *)
+	set allOpenedWindows to id of every window
+
+	repeat with windowID in allOpenedWindows
+
+		(* Close the additional windows that were opened in order
+		   to add the custom theme to the list of terminal themes. *)
+		if initialOpenedWindows does not contain windowID then
+			close (every window whose id is windowID)
+
+		(* Change the theme for the initial opened terminal windows
+		   to remove the need to close them in order for the custom
+		   theme to be applied. *)
+		else
+			set current settings of tabs of (every window whose id is windowID) to settings set themeName
+		end if
+
+	end repeat
+
+end tell
+
+EOD
 
 # Enable “focus follows mouse” for Terminal.app and all X11 apps
 # i.e. hover over a window and start typing in it without clicking first
 #defaults write com.apple.terminal FocusFollowsMouse -bool true
 #defaults write org.x.X11 wm_ffm -bool true
+
+# Install the Solarized Dark theme for iTerm
+open "${HOME}/init/Solarized Dark.itermcolors"
+
+# Don’t display the annoying prompt when quitting iTerm
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 ###############################################################################
 # Time Machine                                                                #
@@ -516,6 +601,23 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # Disable local Time Machine backups
 hash tmutil &> /dev/null && sudo tmutil disablelocal
+
+###############################################################################
+# Activity Monitor                                                            #
+###############################################################################
+
+# Show the main window when launching Activity Monitor
+defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
+# Visualize CPU usage in the Activity Monitor Dock icon
+defaults write com.apple.ActivityMonitor IconType -int 5
+
+# Show all processes in Activity Monitor
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+# Sort Activity Monitor results by CPU usage
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
 
 ###############################################################################
 # Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
@@ -554,9 +656,9 @@ defaults write com.apple.appstore ShowDebugMenu -bool true
 # Google Chrome & Google Chrome Canary                                        #
 ###############################################################################
 
-# Allow installing user scripts via GitHub or Userscripts.org
-defaults write com.google.Chrome ExtensionInstallSources -array "https://*.github.com/*" "http://userscripts.org/*"
-defaults write com.google.Chrome.canary ExtensionInstallSources -array "https://*.github.com/*" "http://userscripts.org/*"
+# Allow installing user scripts via GitHub Gist or Userscripts.org
+defaults write com.google.Chrome ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
+defaults write com.google.Chrome.canary ExtensionInstallSources -array "https://gist.githubusercontent.com/" "http://userscripts.org/*"
 
 ###############################################################################
 # SizeUp.app                                                                  #
@@ -616,9 +718,10 @@ defaults write com.twitter.twitter-mac HideInBackground -bool true
 # Kill affected applications                                                  #
 ###############################################################################
 
-for app in "Address Book" "Calendar" "Contacts" "Dashboard" "Dock" "Finder" \
-	"Mail" "Safari" "SizeUp" "SystemUIServer" "Terminal" "Transmission" \
-	"Twitter" "iCal" "iTunes"; do
-	killall "$app" > /dev/null 2>&1
+for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
+	"Dock" "Finder" "Google Chrome" "Google Chrome Canary" "Mail" "Messages" \
+	"Opera" "Safari" "SizeUp" "Spectacle" "SystemUIServer" "Terminal" \
+	"Transmission" "Twitter" "iCal"; do
+	killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
