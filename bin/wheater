@@ -1,6 +1,0 @@
-#!/bin/sh
-#
-# Show wheater
-#
-
-curl wttr.in
