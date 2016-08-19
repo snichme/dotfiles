@@ -41,8 +41,8 @@
 
 
 [user]
-	name = 
-	email = 
+	name = Magnus Landerblom
+	email = magnus@landerblom.se
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

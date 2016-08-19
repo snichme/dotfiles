@@ -12,6 +12,10 @@ fi
 alias ..="cd .."
 alias ...="cd ../.."
 
-
 alias sudo='sudo '
 
+alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n'
+alias et='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t -n'
+
+alias history='fc -l 1'
+alias h='fc -l 1'

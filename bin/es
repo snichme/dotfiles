@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Start emacs as daemon
-
-exec ~/Applications/Emacs.app/Contents/MacOS/Emacs --daemon
