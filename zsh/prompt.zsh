@@ -61,10 +61,10 @@ git_info() {
   if [ $dirty ]; then
     branch="$branch $dirty"
   fi
-  [ $branch ] && echo " (%F{cyan}$branch%f)"
+  [ $branch ] && echo " %f(%F{cyan}$branch%f)"
 }
 precmd() {
   vcs_info
 }
 
-PROMPT='%F{blue}%n@%m %~%F{236}`git_info` %(?.%F{magenta}.%F{red})❯%f '
+PROMPT='%F{blue}%~%F{236}`git_info` %(?.%F{magenta}.%F{red})❯%f '
