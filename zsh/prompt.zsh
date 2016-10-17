@@ -67,4 +67,12 @@ precmd() {
   vcs_info
 }
 
+f_notifyme() {
+    LAST_EXIT_CODE=$?
+    CMD=$(fc -ln -1)
+    # No point in waiting for the command to complete
+    notifyme "$CMD" "$LAST_EXIT_CODE" &
+}
+
 PROMPT='%F{blue}%~%F{236}`git_info` %(?.%F{magenta}.%F{red})❯%f '
+PROMPT='$(f_notifyme)'$PROMPT
