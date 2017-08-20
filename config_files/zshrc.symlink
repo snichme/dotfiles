@@ -1,0 +1,106 @@
+if [[ -n $SSH_CONNECTION ]]; then
+  export PS1='%m:%3~%# '
+else
+  export PS1='%3~%# '
+fi
+
+export LSCOLORS="exfxcxdxbxegedabagacad"
+export CLICOLOR=true
+
+# zsh functions
+
+fpath=($ZSH/functions $fpath)
+autoload -U $ZSH/functions/*(:t)
+
+## Terminal conf
+
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+
+setopt NO_BG_NICE # don't nice background tasks
+setopt NO_HUP
+setopt NO_LIST_BEEP
+setopt LOCAL_OPTIONS # allow functions to have local options
+setopt LOCAL_TRAPS # allow functions to have local traps
+setopt HIST_VERIFY
+# setopt SHARE_HISTORY # share history between sessions ???
+setopt EXTENDED_HISTORY # add timestamps to history
+setopt PROMPT_SUBST
+setopt CORRECT
+setopt COMPLETE_IN_WORD
+setopt IGNORE_EOF
+
+setopt APPEND_HISTORY # adds history
+setopt INC_APPEND_HISTORY  # adds history incrementally and share it across sessions
+setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
+setopt HIST_REDUCE_BLANKS
+
+# don't expand aliases _before_ completion has finished
+#   like: git comm-[tab]
+setopt complete_aliases
+
+zle -N newtab
+
+# Emacs bindings in terminal
+
+bindkey -e
+
+# Make prompt looks nice
+source .dotfiles/prompt.zsh
+
+
+## Completion
+
+autoload -U compinit
+compinit
+
+# matches case insensitive for lowercase
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# pasting with tabs doesn't perform completion
+zstyle ':completion:*' insert-tab pending
+
+# git's autocompletion for inner commands. Assumes an install of git's
+# bash `git-completion` script at $completion below (this is where Homebrew
+# tosses it, at least).
+completion='$(brew --prefix)/share/zsh/site-functions/_git'
+
+if test -f $completion
+then
+  source $completion
+fi
+
+
+
+# Aliases
+
+alias reload!='. ~/.zshrc'
+alias imgcat='~/.iterm2/imgcat'
+alias ios="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
+# grc overides for ls
+#   Made possible through contributions from generous benefactors like
+#   `brew install coreutils`
+if $(gls &>/dev/null)
+then
+  alias ls="gls -F --color"
+  alias l="gls -lAh --color"
+  alias ll="gls -l --color"
+  alias la='gls -A --color'
+fi
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias sudo='sudo '
+alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n'
+alias et='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t'
+alias e='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t'
+alias emacs='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n'
+alias history='fc -l 1'
+alias h='fc -l 1'
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+
+# Node + nvm
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh

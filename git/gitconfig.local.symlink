@@ -1,5 +1,0 @@
-[user]
-        name = Magnus Landerblom
-        email = magnus@landerblom.se
-[credential]
-        helper = osxkeychain

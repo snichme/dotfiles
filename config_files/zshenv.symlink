@@ -1,0 +1,28 @@
+
+if [[ "$EDITOR" == "" ]] ; then
+  export EDITOR='e'
+fi
+
+# shortcut to this dotfiles path is $ZSH
+export ZSH=$HOME/.dotfiles
+
+# your project folder that we can `c [tab]` to
+export PROJECTS=~/workspace
+
+
+# all of our zsh files
+typeset -U config_files
+config_files=()
+
+
+# PATH
+export PATH="./bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
+export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
+export PATH="$HOME/bin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
+
+export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
+export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
+export GOPATH=$PROJECTS/go
+export PATH="$GOPATH/bin:$PATH"
+
+export PATH="$PATH:/~/workspace/84codes/tools/bin"
