@@ -20,9 +20,17 @@ export PATH="./bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export PATH="$HOME/bin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/sbin:$ZSH/bin:$PATH"
 
+## Postgres
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
+
+## GO
 export GOPATH=$PROJECTS/go
 export PATH="$GOPATH/bin:$PATH"
 
+## Ruby
+export PATH="/Users/magnuslanderblom/.rbenv/shims:${PATH}"
+export RBENV_SHELL=zsh
+
+## 84codes
 export PATH="$PATH:/~/workspace/84codes/tools/bin"
