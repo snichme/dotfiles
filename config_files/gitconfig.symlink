@@ -1,6 +1,4 @@
 # Local/private config goes in the include
-[include]
-        path = ~/.gitconfig.local
 [hub]
         protocol = https
 [alias]
@@ -14,7 +12,7 @@
         branch = auto
         ui = true
 [core]
-	    excludesfile = /Users/mange/.gitignore
+	excludesfile = /Users/magnuslanderblom/.gitignore
         editor = vim
 [apply]
         whitespace = nowarn
@@ -45,7 +43,7 @@
 	email = magnus@landerblom.se
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true

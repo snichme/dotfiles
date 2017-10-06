@@ -47,7 +47,7 @@ zle -N newtab
 bindkey -e
 
 # Make prompt looks nice
-source .dotfiles/prompt.zsh
+source ~/.dotfiles/prompt.zsh
 
 
 ## Completion
@@ -84,8 +84,8 @@ alias ios="open /Applications/Xcode.app/Contents/Developer/Applications/Simulato
 if $(gls &>/dev/null)
 then
   alias ls="gls -F --color"
-  alias l="gls -lAh --color"
-  alias ll="gls -l --color"
+  alias ll="gls -lAh --color"
+  alias l="gls -l --color"
   alias la='gls -A --color'
 fi
 
@@ -98,13 +98,22 @@ alias e='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t'
 alias emacs='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n'
 alias history='fc -l 1'
 alias h='fc -l 1'
-# Pipe my public key to my clipboard.
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+alias hk='heroku'
 
 # Node + nvm
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
+# Heroku
+ppl() {
+  git push origin && git push heroku && heroku logs -t
+}
+ptl() {
+  open https://papertrailapp.com/systems/$(basename $PWD)/events
+}
+epsql() {
+  psql $(heroku config:get ELEPHANTSQL_URL -a ${1:-$(basename $PWD)})
+}
 
 ## rbenv
 #
@@ -124,3 +133,7 @@ rbenv() {
     command rbenv "$command" "$@";;
   esac
 }
+
+
+export PATH="/Users/magnuslanderblom/.rbenv/shims:${PATH}"
+export RBENV_SHELL=zsh

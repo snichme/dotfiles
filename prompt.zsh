@@ -65,6 +65,7 @@ git_info() {
 }
 precmd() {
   vcs_info
+  echo -ne "\e]1;${PWD##*/}\a"
 }
 
 f_notifyme() {
