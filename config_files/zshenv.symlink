@@ -27,4 +27,4 @@ export PATH="$GOPATH/bin:$PATH"
 export PATH="/Users/magnuslanderblom/.rbenv/shims:${PATH}"
 
 ## 84codes
-export PATH="$PATH:$HOME/workspace/84codes/tools/bin"
+export PATH="$PATH:$HOME/workspace/84codes/tools/bin"export GPG_TTY=$(tty)
