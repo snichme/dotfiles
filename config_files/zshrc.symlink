@@ -104,6 +104,11 @@ alias hk='heroku'
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
+# Github
+gh() {
+  open "https://www.github.com/"
+}
+
 # Heroku
 ppl() {
   git push origin && git push heroku && heroku logs -t
@@ -133,7 +138,6 @@ rbenv() {
     command rbenv "$command" "$@";;
   esac
 }
-
-
 export PATH="/Users/magnuslanderblom/.rbenv/shims:${PATH}"
+
 export RBENV_SHELL=zsh

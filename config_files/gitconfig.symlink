@@ -1,51 +1,43 @@
-# Local/private config goes in the include
-[hub]
-        protocol = https
-[alias]
-        co = checkout
-        st = status
-        count   = !git shortlog -sn
-        lg      = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-[color]
-        diff = auto
-        status = auto
-        branch = auto
-        ui = true
-[core]
-	excludesfile = /Users/magnuslanderblom/.gitignore
-        editor = vim
-[apply]
-        whitespace = nowarn
-[mergetool]
-        keepBackup = false
-[difftool]
-        prompt = false
-[help]
-        autocorrect = 1
-[push]
-        # See `git help config` (search for push.default)
-        # for more information on different options of the below setting.
-        #
-        # Setting to git 2.0 default to suppress warning message
-        default = simple
-[diff]
-        tool = vimdiff
-[merge]
-        tool = splice
-
-[mergetool "splice"]
-        cmd = "mvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
-        trustExitCode = true
-
-
 [user]
 	name = Magnus Landerblom
 	email = magnus@landerblom.se
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+	signingkey = 5D0EDAC4BAFB0BFE
+[alias]
+    co = checkout
+    st = status
+    count   = !git shortlog -sn
+    lg      = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    ui = true
+[core]
+    excludesfile = /Users/magnuslanderblom/.gitignore
+    editor = vim
+[apply]
+    whitespace = nowarn
+[mergetool]
+    keepBackup = false
+[difftool]
+    prompt = false
+[push]
+    default = simple
+[diff]
+    tool = vimdiff
+[merge]
+    tool = splice
+[merge "keepMine"]
+    name = always keep mine during merge
+    driver = keepMine.sh %O %A %B
+[mergetool "splice"]
+    cmd = "mvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+    trustExitCode = true
 [credential]
 	helper = osxkeychain
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "https://gitlab.com/"]
+    insteadOf = gl:
+[http]
+	cookiefile = /Users/magnuslanderblom/.gitcookies
